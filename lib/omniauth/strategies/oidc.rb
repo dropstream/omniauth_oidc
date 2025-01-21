@@ -43,6 +43,7 @@ module OmniAuth
                               jwks_uri: nil,                # optional
                               end_session_endpoint: nil)    # optional
 
+      option :redirect_uri
       option :issuer
       option :client_signing_alg
       option :jwt_secret_base64
@@ -118,7 +119,7 @@ module OmniAuth
       end
 
       # Config is build from the json response from the OIDC config endpoint
-      def config
+      def config        
         unless client_options.config_endpoint || params["config_endpoint"]
           raise Error,
                 "Configuration endpoint is missing from options"
@@ -190,7 +191,7 @@ module OmniAuth
       end
 
       def redirect_uri
-        "#{request.base_url}/auth/#{name}/callback"
+        options.redirect_uri || "#{request.base_url}/auth/#{name}/callback"
       end
 
       def encoded_post_logout_redirect_uri
